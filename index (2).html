@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>refer.asia — Get Referred by Someone Who Actually Works There</title>
+  <meta name="description" content="refer.asia connects job seekers with verified employees at real companies for direct referrals — for ₹99/year. Skip the resume black hole." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- PERSISTENT UI -->
+  <div class="xp-counter" id="xpCounter">
+    <span class="xp-star">✦</span> <span id="xpValue">0</span> XP
+  </div>
+  <div class="persistent-cta">
+    <button class="cta-pill" onclick="scrollToScene(6)">Get Referred</button>
+  </div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- SCENE 1 — THE BELIEF -->
+  <section class="scene scene-1" data-xp="0">
+    <div class="scene-inner">
+      <p class="line line-script reveal">You worked hard.</p>
+      <p class="line line-script reveal">You got the degree.</p>
+      <p class="line line-script reveal line-emphasis">You believed that was enough.</p>
+    </div>
+    <div class="scroll-hint reveal">scroll ↓</div>
+  </section>
+
+  <!-- SCENE 2 — THE INTERACTION -->
+  <section class="scene scene-2" data-xp="100">
+    <div class="scene-inner">
+      <p class="line line-script reveal">So you applied.</p>
+
+      <div class="hand-interaction">
+        <svg class="reach-hand" viewBox="0 0 200 200" width="140" height="140">
+          <g class="hand-group">
+            <path d="M100 170 C 60 170, 40 140, 45 100 C 47 80, 55 60, 65 45 C 70 38, 80 38, 82 48 L 84 90 L 90 40 C 91 30, 102 30, 103 40 L 106 88 L 112 38 C 113 28, 124 28, 125 38 L 128 88 L 134 50 C 136 42, 146 44, 145 54 L 138 110 C 150 115, 155 130, 148 145 C 140 162, 120 170, 100 170 Z"
+                  fill="#FF6B4A" stroke="#E85A3B" stroke-width="2"/>
+          </g>
+        </svg>
+        <div class="hold-ring-wrap" id="holdRingWrap">
+          <svg class="hold-ring" viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="52" class="ring-bg" />
+            <circle cx="60" cy="60" r="52" class="ring-fill" id="ringFill" />
+          </svg>
+          <div class="hold-label" id="holdLabel">TAP &amp;<br/>HOLD</div>
+        </div>
+      </div>
+
+      <p class="line line-script reveal" id="afterHoldLine1" style="opacity:0;">And applied.</p>
+      <p class="line line-script reveal line-emphasis" id="afterHoldLine2" style="opacity:0;">And applied again.</p>
+    </div>
+  </section>
+
+  <!-- SCENE 3 — THE GUT-PUNCH -->
+  <section class="scene scene-3" data-xp="200">
+    <div class="scene-inner">
+      <p class="line line-punch reveal">That's the problem.</p>
+      <div class="shatter-card reveal">
+        <div class="shatter-stat">73%</div>
+        <div class="shatter-sub">of resumes are never seen by a human*</div>
+      </div>
+      <p class="line line-script reveal">Not rejected. Not read.</p>
+      <p class="line line-punch reveal line-emphasis">Never opened.</p>
+      <p class="stat-footnote reveal">*Placeholder figure — swap for a sourced, current stat before launch.</p>
+    </div>
+  </section>
+
+  <!-- SCENE 4 — THE TENSION -->
+  <section class="scene scene-4" data-xp="300">
+    <div class="floating-papers">
+      <div class="paper p1"></div>
+      <div class="paper p2"></div>
+      <div class="paper p3"></div>
+      <div class="paper p4"></div>
+      <div class="paper p5"></div>
+    </div>
+    <div class="scene-inner">
+      <p class="line line-script-dark reveal">Because companies don't hire resumes.</p>
+      <p class="line line-script-dark reveal line-emphasis">They hire people someone already trusts.</p>
+      <p class="line line-script-dark reveal">And you don't know anyone.</p>
+    </div>
+  </section>
+
+  <!-- SCENE 5 — THE TURN -->
+  <section class="scene scene-5" data-xp="400">
+    <div class="scene-inner">
+      <p class="line line-script-light reveal">But someone inside does.</p>
+      <p class="line line-script-light reveal">A real person. Already working there.</p>
+      <p class="line line-script-light reveal">Willing to put your name forward.</p>
+      <p class="line line-brand reveal line-emphasis">That's refer.asia.</p>
+    </div>
+  </section>
+
+  <!-- SCENE 6 — THE ASK -->
+  <section class="scene scene-6" data-xp="500">
+    <div class="scene-inner ask-inner">
+      <h2 class="ask-title reveal">Join for ₹99.</h2>
+      <p class="ask-sub reveal">Less than your last food delivery order.</p>
+      <p class="ask-sub reveal">For direct access to people already inside the company you want.</p>
+
+      <div class="ask-cards">
+        <div class="ask-card reveal">
+          <div class="ask-card-tag">For Candidates</div>
+          <div class="ask-card-price">₹99</div>
+          <ul class="ask-card-list">
+            <li>Unlimited referral requests</li>
+            <li>Search verified employees by company</li>
+            <li>Not 400 other applicants — one real person reviewing your name</li>
+          </ul>
+          <form class="ask-form" onsubmit="handleEmailCapture(event, 'candidate')">
+            <input type="email" placeholder="you@email.com" required />
+            <button type="submit" class="btn-brand">Get Started →</button>
+          </form>
+        </div>
+
+        <div class="ask-card ask-card--alt reveal">
+          <div class="ask-card-tag">For HR / Interviewers / Employers</div>
+          <div class="ask-card-price">₹9<span>/approved post</span></div>
+          <ul class="ask-card-list">
+            <li>Post an open role with your work email</li>
+            <li>We review it, then it goes live</li>
+            <li>Earn ₹9 the moment it's approved</li>
+          </ul>
+          <form class="ask-form" onsubmit="handleEmailCapture(event, 'expert')">
+            <input type="email" placeholder="you@company.com" required />
+            <button type="submit" class="btn-brand btn-brand--alt">Post a Role →</button>
+          </form>
+        </div>
+      </div>
+      <p class="ask-footnote reveal">Membership renews yearly. Full details in our <a href="about.html">About</a> page.</p>
+    </div>
+  </section>
+
+  <!-- SCENE 7 — THE PAYOFF -->
+  <section class="scene scene-7" data-xp="600">
+    <div class="confetti-layer" id="confettiLayer"></div>
+    <div class="scene-inner">
+      <p class="line line-payoff reveal">We solved that.</p>
+    </div>
+  </section>
+
+  <!-- SCENE 8 — THE PROOF -->
+  <section class="scene scene-8" data-xp="700">
+    <div class="scene-inner proof-inner">
+      <h2 class="proof-title reveal">Real roles. Real companies. Real people who said yes.</h2>
+
+      <div class="proof-categories reveal">
+        <span class="proof-chip">Software Engineering</span>
+        <span class="proof-chip">Data &amp; AI</span>
+        <span class="proof-chip">Business</span>
+        <span class="proof-chip">Design</span>
+      </div>
+
+      <div class="proof-companies reveal">
+        <span class="company-chip">Google</span>
+        <span class="company-chip">Amazon</span>
+        <span class="company-chip">Microsoft</span>
+        <span class="company-chip">Flipkart</span>
+        <span class="company-chip">Swiggy</span>
+        <span class="company-chip">+ your company next</span>
+      </div>
+
+      <a href="#" class="btn-brand proof-cta" onclick="scrollToScene(6)">Join refer.asia →</a>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-brand">refer.asia</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="#">Jobs</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-copy">© 2026 refer.asia</div>
+    </footer>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
