@@ -80,7 +80,6 @@ function playPopSound() {
   const wrap = document.getElementById('holdRingWrap');
   const ring = document.getElementById('ringFill');
   const label = document.getElementById('holdLabel');
-  const hand = document.querySelector('.reach-hand');
   const line1 = document.getElementById('afterHoldLine1');
   const line2 = document.getElementById('afterHoldLine2');
   if (!wrap || !ring) return;
@@ -95,6 +94,7 @@ function playPopSound() {
     ring.style.transitionDuration = HOLD_MS + 'ms';
     ring.style.strokeDashoffset = '0';
     holdTimer = setTimeout(onComplete, HOLD_MS);
+    if (window.referAsiaOrb) window.referAsiaOrb.setHolding(true);
   }
 
   function cancelHold() {
@@ -102,14 +102,15 @@ function playPopSound() {
     clearTimeout(holdTimer);
     ring.style.transitionDuration = '250ms';
     ring.style.strokeDashoffset = CIRCUMFERENCE;
+    if (window.referAsiaOrb) window.referAsiaOrb.setHolding(false);
   }
 
   function onComplete() {
     completed = true;
     wrap.classList.add('completed');
     label.textContent = '✓';
-    hand.classList.add('grabbed');
     playPopSound();
+    if (window.referAsiaOrb) window.referAsiaOrb.pulseComplete();
 
     gsap.to(line1, { opacity: 1, y: 0, duration: 0.5, delay: 0.1 });
     gsap.to(line2, { opacity: 1, y: 0, duration: 0.5, delay: 0.5 });
@@ -176,3 +177,117 @@ function handleEmailCapture(e, type) {
   btn.disabled = true;
   form.querySelector('input').disabled = true;
 }
+
+/* ── 3D ORB (Three.js) — replaces the flat hand illustration ── */
+(function initOrb3D() {
+  const wrap = document.getElementById('orbCanvasWrap');
+  if (!wrap || typeof THREE === 'undefined') return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SIZE = 180;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.z = 3.4;
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(SIZE, SIZE);
+  wrap.appendChild(renderer.domElement);
+
+  const group = new THREE.Group();
+
+  const wireGeo = new THREE.IcosahedronGeometry(1.05, 1);
+  const wireMat = new THREE.MeshBasicMaterial({ color: 0xFF6B4A, wireframe: true, transparent: true, opacity: 0.9 });
+  const wireMesh = new THREE.Mesh(wireGeo, wireMat);
+  group.add(wireMesh);
+
+  const innerGeo = new THREE.IcosahedronGeometry(1.0, 1);
+  const innerMat = new THREE.MeshBasicMaterial({ color: 0xFFB347, transparent: true, opacity: 0.12 });
+  const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+  group.add(innerMesh);
+
+  scene.add(group);
+
+  let baseSpeed = 0.006;
+  let holding = false;
+  let running = true;
+
+  function setHolding(state) {
+    holding = state;
+  }
+
+  function pulseComplete() {
+    // Quick scale-and-flash pulse on successful hold
+    wireMat.color.setHex(0xFFFFFF);
+    innerMat.color.setHex(0xFF6B4A);
+    const tl = gsap.timeline();
+    tl.to(group.scale, { x: 1.35, y: 1.35, z: 1.35, duration: 0.22, ease: 'back.out(3)' })
+      .to(group.scale, { x: 1, y: 1, z: 1, duration: 0.35, ease: 'power2.out' });
+    setTimeout(() => {
+      wireMat.color.setHex(0xFF6B4A);
+      innerMat.color.setHex(0xFFB347);
+    }, 500);
+  }
+
+  window.referAsiaOrb = { setHolding, pulseComplete };
+
+  function animate() {
+    if (!running) return;
+    const speed = holding ? baseSpeed * 6 : baseSpeed;
+    group.rotation.y += speed;
+    group.rotation.x += speed * 0.4;
+    renderer.render(scene, camera);
+    if (!reduceMotion) requestAnimationFrame(animate);
+  }
+  animate();
+  if (reduceMotion) renderer.render(scene, camera); // static single frame
+
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (running && !reduceMotion) requestAnimationFrame(animate);
+  });
+})();
+
+/* ── 3D TILT ON HOVER (pricing cards, stat card) ── */
+(function initTilt3D() {
+  if (window.matchMedia('(hover: none)').matches) return; // skip on touch
+  const els = document.querySelectorAll('.tilt-3d');
+
+  els.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const rotateY = ((x - cx) / cx) * 8;   // max 8deg
+      const rotateX = -((y - cy) / cy) * 8;
+      el.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+    });
+  });
+})();
+
+/* ── ENHANCED PARALLAX DEPTH (Scene 4 floating papers) ── */
+(function initPaperParallax() {
+  const papers = document.querySelectorAll('.floating-papers .paper');
+  if (!papers.length) return;
+
+  papers.forEach((p, i) => {
+    const speed = 40 + (i % 3) * 30; // vary depth per paper
+    gsap.to(p, {
+      y: (i % 2 === 0 ? -1 : 1) * speed,
+      rotation: '+=25',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.scene-4',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+  });
+})();
