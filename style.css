@@ -273,3 +273,44 @@ body {
   .reveal { transition: none; opacity: 1; transform: none; }
   .scroll-hint { animation: none; }
 }
+
+/* ═══════════════════════════════════════════
+   TIER 1 — 3D upgrades
+   ═══════════════════════════════════════════ */
+
+/* ── 3D ORB (replaces flat hand SVG) ── */
+.orb-3d-wrap {
+  position: absolute; left: -10px; bottom: -20px;
+  width: 180px; height: 180px;
+}
+.orb-3d-wrap canvas { display: block; }
+
+/* ── 3D TILT CARDS ── */
+.tilt-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* Give shatter-card a stronger shadow on tilt for depth cue */
+.shatter-card.tilt-3d {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.ask-card.tilt-3d:hover,
+.shatter-card.tilt-3d:hover {
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+}
+
+/* Perspective container so children's 3D transforms render correctly */
+.scene-3 .scene-inner,
+.scene-6 .ask-cards {
+  perspective: 1000px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-3d { transition: none !important; transform: none !important; }
+}
+@media (hover: none) {
+  /* No hover on touch devices — skip tilt entirely, avoid stuck transforms */
+  .tilt-3d { transform: none !important; }
+}
