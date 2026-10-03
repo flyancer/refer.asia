@@ -1,0 +1,6 @@
+{
+  "name": "REFER.ASIA — The Pan-Asian Employee Referral Network",
+  "description": "The premier employee referral network across Asia. Connect students and candidates with verified insiders at Google, Grab, GoTo, Flipkart, ByteDance, and top tech companies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
